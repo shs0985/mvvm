@@ -16,7 +16,7 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
     private ViewModelProvider.AndroidViewModelFactory viewModelFactory;
     private ActivityLoginBinding binding;
     private AuthViewModel viewModel;
-    private ProgressBar progressBar = findViewById(R.id.progress_bar);
+    private ProgressBar progressBar;// = findViewById(R.id.progress_bar);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,12 +24,18 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
+        progressBar = findViewById(R.id.progress_bar);
+
+        //binding.setLifecycleOwner(this);
+
         if(viewModelFactory == null){
             viewModelFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication());
         }
+
         viewModel = new ViewModelProvider(this, viewModelFactory).get(AuthViewModel.class);
         binding.setViewmodel(viewModel);
-        viewModel.authListener = this;
+
+        viewModel.setAuthListener(this);
     }
 
     @Override
@@ -47,4 +53,5 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
         ViewUtils.toast(message, this);
         ViewUtils.hide(progressBar);
     }
+
 }
